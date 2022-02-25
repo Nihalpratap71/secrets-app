@@ -115,8 +115,8 @@ const User = new mongoose.model("user", userSchema)
 app.route("/")
 .get((req,res)=>{
     res.render("home")
-    console.log(md5("hello world"))
-    console.log(md5("hello world"))
+    // console.log(md5("hello world"))
+    // console.log(md5("hello world"))
 });
 
 
@@ -127,7 +127,7 @@ res.render("register")
 })
 .post((req,res)=>{
 const userName = req.body.username
-const password = req.body.password
+const password = md5(req.body.password)
 
 const user = new User({
     email:userName,
@@ -149,7 +149,7 @@ res.render("login")
 
 .post((req,res)=>{
 const userName = req.body.username
-const password = req.body.password
+const password = md5(req.body.password)
 
 User.findOne({email : userName},(err,foundUser)=>{
    if(!err){
