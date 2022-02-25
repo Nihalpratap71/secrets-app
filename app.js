@@ -89,6 +89,7 @@ const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose")
+const md5 = require("md5")
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.set('view engine', 'ejs');
@@ -114,6 +115,8 @@ const User = new mongoose.model("user", userSchema)
 app.route("/")
 .get((req,res)=>{
     res.render("home")
+    console.log(md5("hello world"))
+    console.log(md5("hello world"))
 });
 
 
@@ -142,16 +145,23 @@ app.route("/login")
 .get((req,res)=>{
 res.render("login")
 })
+
+
 .post((req,res)=>{
 const userName = req.body.username
 const password = req.body.password
 
 User.findOne({email : userName},(err,foundUser)=>{
-    if(!err){
-        if(foundUser.password == password){
-            res.render("secrets")
-        }
-    }
+   if(!err){
+       if(foundUser){
+           console.log(foundUser);
+           if(foundUser.password == password){
+               res.render("secrets")
+           }
+       }
+   }else{
+       console.log(err);
+   }
 })
 
 
